@@ -9,7 +9,7 @@ producer = KafkaProducer(bootstrap_servers='127.0.0.1:9093', value_serializer=la
 def home():
     return "OUR MICROSERVICE"
 
-@app.route("/register")
+@app.route("/register", methods=["POST"])
 def register():
     payload = request.get_json()
     res = {"Message": "user creation request initiated", "email": payload["email"]}
