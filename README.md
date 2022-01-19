@@ -40,3 +40,37 @@ producer = KafkaProducer(bootstrap_servers='127.0.0.1:9093')
 producer.send('usertopic', b'Message from Python')
 producer.flush()
  ```
+
+##### Consume Message from a topic
+```python
+from kafka import KafkaConsumer
+consumer = KafkaConsumer(bootstrap_servers='127.0.0.1:9093')
+consumer.subscribe('usertopic')
+
+for msg in consumer:
+    print(msg.value.decode('UTF-8'))
+```
+
+#### JSON streatming
+##### Producer
+```python
+from kafka import KafkaProducer
+import json
+producer = KafkaProducer(bootstrap_servers='127.0.0.1:9093', value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+
+producer.send('usertopic', {'email': 'user@gmail.com'})
+producer.flush()
+```
+
+##### Consumer
+```python
+from kafka import KafkaConsumer
+import json
+consumer = KafkaConsumer(bootstrap_servers='127.0.0.1:9093')
+consumer.subscribe('usertopic')
+
+for msg in consumer:
+    resp = json.loads(msg.value.decode('UTF-8'))
+    print(resp['email'])
+
+```
